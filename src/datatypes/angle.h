@@ -1,4 +1,5 @@
 #pragma once
+#include <float.h>
 #include <math.h>
 
 typedef struct {
@@ -73,20 +74,16 @@ static inline float cosine_law_side(float a, float b, angle C) {
   return sqrtf(a * a + b * b - 2.0f * a * b * cosf(C.radians));
 }
 
-/* find missing angle (given 3 sides) */
 static inline angle cosine_law_angle(float a, float b, float c) {
   float denom = 2.0f * a * b;
 
-  if (denom == 0.0f)
+  if (fabsf(denom) < FLT_EPSILON) {
     return (angle){0};
+  }
 
   float cosC = (a * a + b * b - c * c) / denom;
 
-  /* clamp for numerical safety */
-  if (cosC > 1.0f)
-    cosC = 1.0f;
-  if (cosC < -1.0f)
-    cosC = -1.0f;
+  cosC = fmaxf(-1.0f, fminf(1.0f, cosC));
 
   return (angle){acosf(cosC)};
 }

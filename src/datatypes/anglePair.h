@@ -4,4 +4,4 @@
 typedef struct {
   angle a;
   angle b;
-} AnglePair;
+} anglePair;
